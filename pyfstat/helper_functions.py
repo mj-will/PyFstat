@@ -254,7 +254,7 @@ def texify_float(x, d=2):
         stem = np.round(x / 10 ** power, d)
         if d == 1:
             stem = int(stem)
-        return r"${}{{\times}}10^{{{}}}$".format(stem, power)
+        return "${}{{\\times}}10^{{{}}}$".format(stem, power)
 
 
 def initializer(func):

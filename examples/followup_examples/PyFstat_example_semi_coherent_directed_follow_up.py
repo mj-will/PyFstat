@@ -102,6 +102,8 @@ mcmc.run(
 walkers_fig.savefig(os.path.join(outdir, label + "_walkers.png"))
 plt.close(walkers_fig)
 
+mcmc.write_prior_table()
+
 mcmc.print_summary()
 mcmc.plot_corner(add_prior=True, truths=signal_parameters)
 mcmc.plot_prior_posterior(injection_parameters=signal_parameters)

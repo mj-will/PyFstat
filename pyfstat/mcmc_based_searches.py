@@ -72,31 +72,31 @@ class MCMCSearch(BaseSearchClass):
     """
 
     symbol_dictionary = dict(
-        F0=r"$f$",
-        F1=r"$\dot{f}$",
-        F2=r"$\ddot{f}$",
-        Alpha=r"$\alpha$",
-        Delta=r"$\delta$",
-        asini=r"asini",
-        period=r"P",
-        ecc=r"ecc",
-        tp=r"tp",
-        argp=r"argp",
+        F0="$f$",
+        F1="$\\dot{f}$",
+        F2="$\\ddot{f}$",
+        Alpha="$\\alpha$",
+        Delta="$\\delta$",
+        asini="asini",
+        period="P",
+        ecc="ecc",
+        tp="tp",
+        argp="argp",
     )
     """
         Key, val pairs of the parameters (`F0`, `F1`, ...), to LaTeX math
         symbols for plots
     """
     unit_dictionary = dict(
-        F0=r"Hz",
-        F1=r"Hz/s",
-        F2=r"Hz/s$^2$",
-        Alpha=r"rad",
-        Delta=r"rad",
+        F0="Hz",
+        F1="Hz/s",
+        F2="Hz/s$^2$",
+        Alpha="rad",
+        Delta="rad",
         asini="",
-        period=r"s",
+        period="s",
         ecc="",
-        tp=r"s",
+        tp="s",
         argp="",
     )
     """
@@ -793,7 +793,7 @@ class MCMCSearch(BaseSearchClass):
 
             if label is None:
                 s = s or self.symbol_dictionary[key].replace(
-                    "_{glitch}", r"_\mathrm{glitch}"
+                    "_{glitch}", "_\\mathrm{glitch}"
                 )
                 u = u or self.unit_dictionary[key]
                 label = (
@@ -913,7 +913,7 @@ class MCMCSearch(BaseSearchClass):
                         samples_plt[:, j] = (s - self.minStartTime) / (
                             self.maxStartTime - self.minStartTime
                         )
-                        labels[j] = r"$R_{\mathrm{glitch}}$"
+                        labels[j] = "$R_{\\mathrm{glitch}}$"
 
             if type(nstds) is int and "range" not in kwargs:
                 _range = []
@@ -1507,7 +1507,7 @@ class MCMCSearch(BaseSearchClass):
                 if symbols:
                     axes[0].set_ylabel(symbols[0], labelpad=labelpad)
 
-            axes[-1].set_xlabel(r"Number of steps", labelpad=0.2)
+            axes[-1].set_xlabel("Number of steps", labelpad=0.2)
 
             if plot_det_stat:
                 if len(axes) == ndim:
@@ -1544,10 +1544,10 @@ class MCMCSearch(BaseSearchClass):
                     )
                     pass
                 if self.BSGL:
-                    axes[-1].set_xlabel(r"$\log_{10}\mathcal{B}_\mathrm{S/GL}$")
+                    axes[-1].set_xlabel("$\\log_{10}\\mathcal{B}_\\mathrm{S/GL}$")
                 else:
-                    axes[-1].set_xlabel(r"$\widetilde{2\mathcal{F}}$")
-                axes[-1].set_ylabel(r"$\mathrm{Counts}$")
+                    axes[-1].set_xlabel("$\\widetilde{2\\mathcal{F}}$")
+                axes[-1].set_ylabel("$\\mathrm{Counts}$")
                 combined_vals = np.append(detstat_burnin, detstat)
                 if len(combined_vals) > 0:
                     minv = np.min(combined_vals)
@@ -2055,8 +2055,8 @@ class MCMCSearch(BaseSearchClass):
         """Generate a .tex file of the prior"""
         with open(os.path.join(self.outdir, self.label + "_prior.tex"), "w") as f:
             f.write(
-                r"\begin{tabular}{c l c} \hline" + "\n"
-                r"Parameter & & &  \\ \hhline{====}"
+                "\\begin{tabular}{c l c} \\hline" + "\n"
+                "Parameter & & &  \\ \\hhline{====}"
             )
 
             for key, prior in self.theta_prior.items():
@@ -2065,22 +2065,22 @@ class MCMCSearch(BaseSearchClass):
                     if Type == "unif":
                         a = prior["lower"]
                         b = prior["upper"]
-                        line = r"{} & $\mathrm{{Unif}}$({}, {}) & {}\\"
+                        line = "{} & $\\mathrm{{Unif}}$({}, {}) & {}\\"
                     elif Type == "norm":
                         a = prior["loc"]
                         b = prior["scale"]
-                        line = r"{} & $\mathcal{{N}}$({}, {}) & {}\\"
+                        line = "{} & $\\mathcal{{N}}$({}, {}) & {}\\"
                     elif Type == "halfnorm":
                         a = prior["loc"]
                         b = prior["scale"]
-                        line = r"{} & $|\mathcal{{N}}$({}, {})| & {}\\"
+                        line = "{} & $|\\mathcal{{N}}$({}, {})| & {}\\"
 
                     u = self.unit_dictionary[key]
                     s = self.symbol_dictionary[key]
                     f.write("\n")
                     a = helper_functions.texify_float(a)
                     b = helper_functions.texify_float(b)
-                    f.write(" " + line.format(s, a, b, u) + r" \\")
+                    f.write(" " + line.format(s, a, b, u) + " \\")
             f.write("\n\\end{tabular}\n")
 
     def print_summary(self):
@@ -2235,8 +2235,8 @@ class MCMCSearch(BaseSearchClass):
         if make_plots:
             fig, (ax1, ax2) = plt.subplots(nrows=2, figsize=(6, 8))
             ax1.semilogx(betas, mean_lnlikes, "-o")
-            ax1.set_xlabel(r"$\beta$")
-            ax1.set_ylabel(r"$\langle \log(\mathcal{L}) \rangle$")
+            ax1.set_xlabel("$\\beta$")
+            ax1.set_ylabel("$\\langle \\log(\\mathcal{L}) \\rangle$")
             min_betas = []
             evidence = []
             for i in range(int(len(betas) / 2.0)):
@@ -2246,11 +2246,11 @@ class MCMCSearch(BaseSearchClass):
 
             ax2.semilogx(min_betas, evidence, "-o")
             ax2.set_ylabel(
-                r"$\int_{\beta_{\mathrm{Min}}}^{\beta=1}"
-                + r"\langle \log(\mathcal{L})\rangle d\beta$",
+                "$\\int_{\\beta_{\\mathrm{Min}}}^{\\beta=1}"
+                + "\\langle \\log(\\mathcal{L})\\rangle d\\beta$",
                 size=16,
             )
-            ax2.set_xlabel(r"$\beta_{\mathrm{min}}$")
+            ax2.set_xlabel("$\\beta_{\\mathrm{min}}$")
             plt.tight_layout()
             fig.savefig(os.path.join(self.outdir, self.label + "_beta_lnl.png"))
             plt.close(fig)
@@ -2344,7 +2344,7 @@ class MCMCGlitchSearch(MCMCSearch):
             "multiplier": 1 / 86400.0,
             "subtractor": "minStartTime",
             "unit": "day",
-            "label": r"$t^{g}_0$ \n [d]",
+            "label": "$t^{g}_0$ \n [d]",
         }
     )
     """
@@ -3242,16 +3242,16 @@ class MCMCFollowUpSearch(MCMCSemiCoherentSearch):
         if gen_tex_table:
             filename = os.path.join(self.outdir, self.label + "_run_setup.tex")
             with open(filename, "w+") as f:
-                f.write(r"\begin{tabular}{c|ccc}" + "\n")
+                f.write("\\begin{tabular}{c|ccc}" + "\n")
                 f.write(
-                    r"Stage & $N_\mathrm{seg}$ &"
-                    r"$T_\mathrm{coh}^{\rm days}$ &"
-                    r"$\mathcal{N}^*(\Nseg^{(\ell)}, \Delta\mathbf{\lambda}^{(0)})$ \\ \hline"
+                    "Stage & $N_\\mathrm{seg}$ &"
+                    "$T_\\mathrm{coh}^{\\rm days}$ &"
+                    "$\\mathcal{N}^*(\\Nseg^{(\\ell)}, \\Delta\\mathbf{\\lambda}^{(0)})$ \\ \\hline"
                     "\n"
                 )
                 for i, rs in enumerate(run_setup):
                     Tcoh = float(self.maxStartTime - self.minStartTime) / rs[1] / 86400
-                    line = r"{} & {} & {} & {} \\" + "\n"
+                    line = "{} & {} & {} & {} \\" + "\n"
                     if Nstar_vals[i] is None:
                         Nstar = "N/A"
                     else:
@@ -3263,7 +3263,7 @@ class MCMCFollowUpSearch(MCMCSemiCoherentSearch):
                         helper_functions.texify_float(Nstar),
                     )
                     f.write(line)
-                f.write(r"\end{tabular}" + "\n")
+                f.write("\\end{tabular}" + "\n")
 
         if args.setup_only:
             logging.info("Exit as requested by setup_only flag")
@@ -3330,7 +3330,7 @@ class MCMCTransientSearch(MCMCSearch):
         Alpha=r"$\alpha$",
         Delta=r"$\delta$",
         transient_tstart=r"$t_\mathrm{start}$",
-        transient_duration=r"$\Delta T$",
+        transient_duration="$\\Delta T$",
     )
     """
         Key, val pairs of the parameters (`F0`, `F1`, ...), to LaTeX math

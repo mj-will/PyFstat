@@ -44,22 +44,22 @@ class GridSearch(BaseSearchClass):
     """
 
     tex_labels = {
-        "F0": r"$f$",
-        "F1": r"$\dot{f}$",
-        "F2": r"$\ddot{f}$",
-        "Alpha": r"$\alpha$",
-        "Delta": r"$\delta$",
-        "twoF": r"$\widetilde{2\mathcal{F}}$",
-        "log10BSGL": r"$\log_{10}\mathcal{B}_{\mathrm{SGL}}$",
+        "F0": "$f$",
+        "F1": "$\\dot{f}$",
+        "F2": "$\\ddot{f}$",
+        "Alpha": "$\\alpha$",
+        "Delta": "$\\delta$",
+        "twoF": "$\\widetilde{2\\mathcal{F}}$",
+        "log10BSGL": "$\\log_{10}\\mathcal{B}_{\\mathrm{SGL}}$",
     }
     """Formatted labels used for plot annotations."""
 
     tex_labels0 = {
-        "F0": r"$-f_0$",
-        "F1": r"$-\dot{f}_0$",
-        "F2": r"$-\ddot{f}_0$",
-        "Alpha": r"$-\alpha_0$",
-        "Delta": r"$-\delta_0$",
+        "F0": "$-f_0$",
+        "F1": "$-\\dot{f}_0$",
+        "F2": "$-\\ddot{f}_0$",
+        "Alpha": "$-\\alpha_0$",
+        "Delta": "$-\\delta_0$",
     }
     """Formatted labels used for annotating central values in plots."""
 
@@ -433,11 +433,11 @@ class GridSearch(BaseSearchClass):
                 rtol[key] = 0
                 atol[key] = 0
             elif f.endswith("g"):
-                precision = int(re.findall(r"\d+", f)[-1])
+                precision = int(re.findall("\\d+", f)[-1])
                 rtol[key] = 10 ** (1 - precision)
                 atol[key] = 0
             elif f.endswith("f"):
-                decimals = int(re.findall(r"\d+", f)[-1])
+                decimals = int(re.findall("\\d+", f)[-1])
                 rtol[key] = 0
                 atol[key] = 10 ** -decimals
             else:

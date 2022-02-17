@@ -84,7 +84,6 @@ setup(
     ],
     python_requires=">=%s.%s.%s" % min_python_version[:3],
     install_requires=[
-        "bashplotlib",
         "corner",
         "dill",
         "lalsuite>=7.2",

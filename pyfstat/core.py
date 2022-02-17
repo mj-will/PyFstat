@@ -488,14 +488,6 @@ class ComputeFstat(BaseSearchClass):
         self.SFT_timestamps = [float(s) for s in SFT_timestamps]
         if len(SFT_timestamps) == 0:
             raise ValueError("Failed to load any data")
-        if args.quite is False and args.no_interactive is False:
-            try:
-                from bashplotlib.histogram import plot_hist
-
-                print("Data timestamps histogram:")
-                plot_hist(SFT_timestamps, height=5, bincount=50)
-            except ImportError:
-                pass
 
         cl_tconv1 = "lalapps_tconvert {}".format(int(SFT_timestamps[0]))
         output = helper_functions.run_commandline(cl_tconv1, log_level=logging.DEBUG)

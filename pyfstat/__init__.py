@@ -26,6 +26,7 @@ from .make_sfts import (
     FrequencyModulatedArtifactWriter,
     GlitchWriter,
     LineWriter,
+    MakeFakeData,
     Writer,
 )
 from .mcmc_based_searches import (

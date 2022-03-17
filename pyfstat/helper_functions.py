@@ -1242,3 +1242,13 @@ def generate_loudest_file(
 
     run_commandline(cmd, return_output=False)
     return loudest_file
+
+
+def convert_css_to_list(comma_separated_string):
+    """Idempotent implementation of 'A,B,C' -> ['A', 'B', 'C']"""
+
+    return (
+        comma_separated_string.split(",")
+        if isinstance(comma_separated_string, str)
+        else comma_separated_string
+    )

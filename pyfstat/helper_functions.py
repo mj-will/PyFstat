@@ -445,40 +445,53 @@ def get_sft_as_arrays(sftfilepattern, fMin=None, fMax=None, constraints=None):
         raise ValueError("Need either none or both of fMin, fMax.")
 
     sft_catalog = lalpulsar.SFTdataFind(sftfilepattern, constraints)
-    ifo_labels = lalpulsar.ListIFOsInCatalog(sft_catalog)
+    ifo_labels_from_catalog = lalpulsar.ListIFOsInCatalog(sft_catalog)
 
     logging.info(
-        f"Loading {sft_catalog.length} SFTs from {', '.join(ifo_labels.data)}..."
+        f"Loading {sft_catalog.length} SFTs from {', '.join(ifo_labels_from_catalog.data)}..."
     )
     multi_sfts = lalpulsar.LoadMultiSFTs(sft_catalog, fMin, fMax)
     logging.info("done!")
+
+    frequencies, times, amplitudes = unpack_multi_sft_into_dicts(multi_sfts)
+    if not all(ifo in times for ifo in ifo_labels_from_catalog.data):
+        raise ValueError(
+            f"Detector names in unpacked SFTs {list(times.keys())} do not match "
+            f"detector names in the catalog {ifo_labels_from_catalog.data}."
+        )
+
+    return frequencies, times, amplitudes
+
+
+def unpack_multi_sft_into_dicts(multi_sfts):
 
     times = {}
     amplitudes = {}
 
     old_frequencies = None
-    for ind, ifo in enumerate(ifo_labels.data):
 
-        sfts = multi_sfts.data[ind]
+    for ind in range(multi_sfts.length):
 
-        times[ifo] = np.array([sft.epoch.gpsSeconds for sft in sfts.data])
-        amplitudes[ifo] = np.array([sft.data.data for sft in sfts.data]).T
+        these_sfts = multi_sfts.data[ind]
+        ifo = these_sfts.data[0].name
 
-        nbins, nsfts = amplitudes[ifo].shape
-
+        new_amplitudes = np.array([sft.data.data for sft in these_sfts.data]).T
+        nbins, nsfts = new_amplitudes.shape
         logging.info(f"{nsfts} retrieved from {ifo}.")
 
-        f0 = sfts.data[0].f0
-        df = sfts.data[0].deltaF
+        f0 = these_sfts.data[0].f0
+        df = these_sfts.data[0].deltaF
         frequencies = np.linspace(f0, f0 + (nbins - 1) * df, nbins)
-
         if (old_frequencies is not None) and not np.allclose(
             frequencies, old_frequencies
         ):
             raise ValueError(
-                f"Frequencies don't match between {ifo_labels.data[ind-1]} and {ifo}"
+                f"Frequencies don't match between {list(times)[-1]} and {ifo}"
             )
         old_frequencies = frequencies
+
+        times[ifo] = np.array([sft.epoch.gpsSeconds for sft in these_sfts.data])
+        amplitudes[ifo] = new_amplitudes
 
     return frequencies, times, amplitudes
 
